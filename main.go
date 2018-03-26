@@ -7,5 +7,6 @@ import (
 
 func main() {
 	logger.SetupLogger()
-	ogiconsumer.Consume()
+	var k ogiconsumer.Kafka
+	ogiconsumer.Consume(&k)
 }

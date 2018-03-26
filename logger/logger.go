@@ -8,10 +8,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type Logger struct {
-	*logrus.Logger
-}
-
 var logger *logrus.Logger
 
 func SetupLogger() {

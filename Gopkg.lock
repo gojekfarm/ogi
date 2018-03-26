@@ -4,14 +4,29 @@
 [[projects]]
   branch = "master"
   name = "github.com/abhishekkr/gol"
-  packages = ["golenv"]
+  packages = [
+    "golenv",
+    "golerror"
+  ]
   revision = "408733f585d9950f1e83016bf3a6acea4adcca15"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/bouk/monkey"
+  packages = ["."]
+  revision = "5df1f207ff77e025801505ae4d903133a0b4353f"
 
 [[projects]]
   name = "github.com/confluentinc/confluent-kafka-go"
   packages = ["kafka"]
   revision = "f696f02dcbb04d95b103c5b848bb15f749a996f7"
   version = "v0.11.0"
+
+[[projects]]
+  name = "github.com/davecgh/go-spew"
+  packages = ["spew"]
+  revision = "346938d642f2ec3594ed81d874461961cd0faa76"
+  version = "v1.1.0"
 
 [[projects]]
   name = "github.com/newrelic/go-agent"
@@ -28,10 +43,31 @@
   version = "v1.11.0"
 
 [[projects]]
+  name = "github.com/pmezard/go-difflib"
+  packages = ["difflib"]
+  revision = "792786c7400a136282c1664665ae0a8db921c6c2"
+  version = "v1.0.0"
+
+[[projects]]
   name = "github.com/sirupsen/logrus"
   packages = ["."]
   revision = "c155da19408a8799da419ed3eeb0cb5db0ad5dbc"
   version = "v1.0.5"
+
+[[projects]]
+  name = "github.com/stretchr/objx"
+  packages = ["."]
+  revision = "facf9a85c22f48d2f52f2380e4efce1768749a89"
+  version = "v0.1"
+
+[[projects]]
+  name = "github.com/stretchr/testify"
+  packages = [
+    "assert",
+    "mock"
+  ]
+  revision = "12b6f73e6084dad08a7c6e575284b177ecafbc71"
+  version = "v1.2.1"
 
 [[projects]]
   branch = "master"
@@ -51,6 +87,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3b187f0e6471ddeafeb2817b3e1e874e2412b28cacda10d1b925a46ee8074634"
+  inputs-digest = "d47d2e242704afd65ba306fd02a3363d8d097ffe5f04e62548f5a5028aa16a17"
   solver-name = "gps-cdcl"
   solver-version = 1
