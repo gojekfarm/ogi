@@ -37,3 +37,4 @@ temp/*
 *.lock
 *.sock
 vendor/**
+go-tasks.pkg

@@ -56,7 +56,7 @@ func (k *Kafka) SubscribeTopics(topics []string) {
 
 func (k *Kafka) EventHandler() {
 	producer := ogiproducer.NewProducer()
-	defer ogiproducer.CloseProducer(producer)
+	defer producer.Close()
 
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)

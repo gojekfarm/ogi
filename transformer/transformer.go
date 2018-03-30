@@ -5,7 +5,6 @@ import (
 	"fmt"
 
 	"github.com/abhishekkr/gol/golenv"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
 
 	"github.com/gojekfarm/kafka-ogi/instrumentation"
 
@@ -51,7 +50,7 @@ func validateConfig() {
 	}
 }
 
-func Transform(producer *kafka.Producer, msg string) {
+func Transform(producer ogiproducer.Producer, msg string) {
 	txn := instrumentation.StartTransaction("transform_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
 	msgBytes := []byte(msg)
