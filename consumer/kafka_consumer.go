@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"syscall"
 
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
 
 	logger "github.com/gojekfarm/kafka-ogi/logger"
 	ogiproducer "github.com/gojekfarm/kafka-ogi/producer"
@@ -61,30 +61,33 @@ func (k *Kafka) EventHandler() {
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
-	for {
+	run := true
+	for run == true {
 		select {
 		case sig := <-sigchan:
 			logger.Errorf("Caught signal %v: terminating\n", sig)
-			break
+			run = false
 
 		case ev := <-k.Consumer.Events():
 			switch e := ev.(type) {
+
 			case kafka.AssignedPartitions:
 				logger.Infof("%% %v\n", e)
 				k.Consumer.Assign(e.Partitions)
+
 			case kafka.RevokedPartitions:
 				logger.Infof("%% %v\n", e)
 				k.Consumer.Unassign()
+
 			case *kafka.Message:
-				////fmt.Printf("%% Message on %s:\n%s\n",
-				////	e.TopicPartition, string(e.Value))
 				ogitransformer.Transform(producer, string(e.Value))
 
 			case kafka.PartitionEOF:
 				logger.Infof("%% Reached %v\n", e)
+
 			case kafka.Error:
 				logger.Errorf("%% Error: %v\n", e)
-				break
+				run = false
 			}
 		}
 	}
