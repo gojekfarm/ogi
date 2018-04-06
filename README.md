@@ -10,7 +10,7 @@ service used to pull data from a kafka topic and write to multiple topics based 
 
 ### consumer
 
-> this package prvides a `Consume(consumer)` method to be able to munch on any kafka-topic,
+> this package provides a `Consume(consumer)` method to be able to munch on any kafka-topic,
 >
 > currently `confluent-kafka` implementation for consumer is available and can be configured and passed
 
@@ -19,5 +19,27 @@ service used to pull data from a kafka topic and write to multiple topics based 
 > * assign partition
 > * unassign partition
 > * exit on error event
+
+
+### producer
+
+> this package provides a `Produce(producer, topic, message)` method to be able to churn out required message to any topic on provided producer,
+>
+> currently `confluent-kafka` implementation for producer is available which can be configured and passed
+
+> `confluent-kafka` producer let's figure out a partition for message using CRC32 over total partition count, if can't uses PartitionAny conf
+>
+> then message and topic gets produced to the calculated partition using `ProduceMessage`
+
+
+### transformer
+
+> this package provides `Transform(producer, message)` method which calls delegates transform to configured `LogTransformer` for that process,
+>
+> currently `KubernetesKafkaLog` is available implementation of `LogTransformer`
+
+> `KubernetesKafkaLog` which checks for Kubernetes.Labels for configured label to be picked as destination kafka topic
+>
+> it applies Kubernetes.PodName as message-key to be used and then produces message to passed through producer
 
 ---
