@@ -18,7 +18,6 @@ type Producer interface {
 
 var (
 	BootstrapServers = golenv.OverrideIfEnv("PRODUCER_BOOTSTRAP_SERVERS", "")
-	PartitionCounts  map[string]int
 )
 
 func validateConfig() {

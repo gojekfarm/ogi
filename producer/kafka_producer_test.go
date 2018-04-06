@@ -1,17 +1,20 @@
 package ogiproducer
 
 import (
+	"net/http"
 	"testing"
 
 	"github.com/abhishekkr/gol/golerror"
 	"github.com/bouk/monkey"
 	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
+	newrelic "github.com/newrelic/go-agent"
 	"github.com/stretchr/testify/assert"
 
-	logger "github.com/gojekfarm/kafka-ogi/logger"
+	"github.com/gojekfarm/kafka-ogi/instrumentation"
+	"github.com/gojekfarm/kafka-ogi/logger"
 )
 
-func TestNewProducerSuccess(t *testing.T) {
+func TestKafkaNewProducerSuccess(t *testing.T) {
 	setTestConfig()
 	k := &Kafka{}
 
@@ -35,7 +38,7 @@ func TestNewProducerSuccess(t *testing.T) {
 	assert.True(t, kafkaGuardB)
 }
 
-func TestNewProducerFailure(t *testing.T) {
+func TestKafkaNewProducerFailure(t *testing.T) {
 	setTestConfig()
 	k := &Kafka{}
 
@@ -59,7 +62,7 @@ func TestNewProducerFailure(t *testing.T) {
 	assert.True(t, kafkaGuardB)
 }
 
-func TestNewProducerFailAtValidateConfig(t *testing.T) {
+func TestKafkaNewProducerFailAtValidateConfig(t *testing.T) {
 	unsetTestConfig()
 	k := &Kafka{}
 
@@ -76,7 +79,7 @@ func TestNewProducerFailAtValidateConfig(t *testing.T) {
 	assert.True(t, guardB)
 }
 
-func TestClose(t *testing.T) {
+func TestKafkaClose(t *testing.T) {
 	setTestConfig()
 	k := &Kafka{}
 
@@ -93,27 +96,182 @@ func TestClose(t *testing.T) {
 	assert.True(t, guardB)
 }
 
-func TestGetMetadataSuccess(t *testing.T) {
-	//TBD
-	assert.Equal(t, "wip", "tbd")
+func TestKafkaGetMetadataSuccessForEmptyMetadata(t *testing.T) {
+	setTestConfig()
+	k := &Kafka{}
+
+	var nr, nrEnd, kguard *monkey.PatchGuard
+	var kguardB bool
+	nr = monkey.Patch(instrumentation.StartTransaction, func(string, http.ResponseWriter, *http.Request) newrelic.Transaction {
+		nr.Unpatch()
+		defer nr.Restore()
+		return nil
+	})
+	nrEnd = monkey.Patch(instrumentation.EndTransaction, func(*newrelic.Transaction) {
+		nrEnd.Unpatch()
+		defer nrEnd.Restore()
+		return
+	})
+	kguard = monkey.Patch((*kafka.Producer).GetMetadata, func(*kafka.Producer, *string, bool, int) (*kafka.Metadata, error) {
+		kguard.Unpatch()
+		defer kguard.Restore()
+		kguardB = true
+		return &kafka.Metadata{}, nil
+	})
+
+	k.GetMetadata()
+	assert.True(t, kguardB)
+	assert.Equal(t, map[string]int{}, k.PartitionCounts)
 }
 
-func TestGetMetadataFailure(t *testing.T) {
-	//TBD
-	assert.Equal(t, "wip", "tbd")
+func TestKafkaGetMetadataSuccessForSomeMetadata(t *testing.T) {
+	setTestConfig()
+	k := &Kafka{}
+
+	var nr, nrEnd, kguard *monkey.PatchGuard
+	var kguardB bool
+	nr = monkey.Patch(instrumentation.StartTransaction, func(string, http.ResponseWriter, *http.Request) newrelic.Transaction {
+		nr.Unpatch()
+		defer nr.Restore()
+		return nil
+	})
+	nrEnd = monkey.Patch(instrumentation.EndTransaction, func(*newrelic.Transaction) {
+		nrEnd.Unpatch()
+		defer nrEnd.Restore()
+		return
+	})
+	kguard = monkey.Patch((*kafka.Producer).GetMetadata, func(*kafka.Producer, *string, bool, int) (*kafka.Metadata, error) {
+		kguard.Unpatch()
+		defer kguard.Restore()
+		kguardB = true
+		return &kafka.Metadata{
+			Topics: map[string]kafka.TopicMetadata{
+				"some":  kafka.TopicMetadata{},
+				"other": kafka.TopicMetadata{},
+			},
+		}, nil
+	})
+
+	k.GetMetadata()
+	assert.True(t, kguardB)
+	assert.Equal(t, 2, len(k.PartitionCounts))
 }
 
-func TestGetPartitionNumberForValidPartitionCount(t *testing.T) {
-	//TBD
-	assert.Equal(t, "wip", "tbd")
+func TestKafkaGetMetadataFailure(t *testing.T) {
+	setTestConfig()
+	k := &Kafka{}
+
+	var nr, nrEnd, kguard *monkey.PatchGuard
+	var kguardB bool
+	nr = monkey.Patch(instrumentation.StartTransaction, func(string, http.ResponseWriter, *http.Request) newrelic.Transaction {
+		nr.Unpatch()
+		defer nr.Restore()
+		return nil
+	})
+	nrEnd = monkey.Patch(instrumentation.EndTransaction, func(*newrelic.Transaction) {
+		nrEnd.Unpatch()
+		defer nrEnd.Restore()
+		return
+	})
+	kguard = monkey.Patch((*kafka.Producer).GetMetadata, func(*kafka.Producer, *string, bool, int) (*kafka.Metadata, error) {
+		kguard.Unpatch()
+		defer kguard.Restore()
+		kguardB = true
+		return &kafka.Metadata{
+			Topics: map[string]kafka.TopicMetadata{
+				"some":  kafka.TopicMetadata{},
+				"other": kafka.TopicMetadata{},
+			},
+		}, golerror.Error(123, "this is error")
+	})
+
+	k.GetMetadata()
+	assert.True(t, kguardB)
+	assert.Equal(t, 0, len(k.PartitionCounts))
 }
 
-func TestGetPartitionNumberForMissingPartitionCount(t *testing.T) {
-	//TBD
-	assert.Equal(t, "wip", "tbd")
+func TestKafkaGetPartitionNumberForValidPartitionCount(t *testing.T) {
+	setTestConfig()
+	k := &Kafka{
+		PartitionCounts: map[string]int{"some": 10, "other": 7},
+	}
+
+	var nr, nrEnd *monkey.PatchGuard
+	nr = monkey.Patch(instrumentation.StartTransaction, func(string, http.ResponseWriter, *http.Request) newrelic.Transaction {
+		nr.Unpatch()
+		defer nr.Restore()
+		return nil
+	})
+	nrEnd = monkey.Patch(instrumentation.EndTransaction, func(*newrelic.Transaction) {
+		nrEnd.Unpatch()
+		defer nrEnd.Restore()
+		return
+	})
+
+	partitionNum := k.GetPartitionNumber("some", "what")
+	assert.Equal(t, int(partitionNum), 4)
+	partitionNum = k.GetPartitionNumber("other", "ever")
+	assert.Equal(t, int(partitionNum), 6)
 }
 
-func TestProduceMessage(t *testing.T) {
+func TestKafkaGetPartitionNumberForMissingPartitionCount(t *testing.T) {
+	setTestConfig()
+	k := &Kafka{}
+
+	var nr, nrEnd, kguard *monkey.PatchGuard
+	var kguardB bool
+	nr = monkey.Patch(instrumentation.StartTransaction, func(string, http.ResponseWriter, *http.Request) newrelic.Transaction {
+		nr.Unpatch()
+		defer nr.Restore()
+		return nil
+	})
+	nrEnd = monkey.Patch(instrumentation.EndTransaction, func(*newrelic.Transaction) {
+		nrEnd.Unpatch()
+		defer nrEnd.Restore()
+		return
+	})
+	kguard = monkey.Patch((*Kafka).GetMetadata, func(_k *Kafka) {
+		kguard.Unpatch()
+		defer kguard.Restore()
+		kguardB = true
+		_k.PartitionCounts = map[string]int{"some": 10, "other": 7}
+	})
+
+	partitionNum := k.GetPartitionNumber("some", "what")
+	assert.Equal(t, int(partitionNum), 4)
+	partitionNum = k.GetPartitionNumber("other", "ever")
+	assert.Equal(t, int(partitionNum), 6)
+	assert.True(t, kguardB)
+}
+
+func TestKafkaGetPartitionNumberForZeroPartitionCount(t *testing.T) {
+	setTestConfig()
+	k := &Kafka{
+		PartitionCounts: map[string]int{"other": 0},
+	}
+
+	var nr, nrEnd, kguard *monkey.PatchGuard
+	nr = monkey.Patch(instrumentation.StartTransaction, func(string, http.ResponseWriter, *http.Request) newrelic.Transaction {
+		nr.Unpatch()
+		defer nr.Restore()
+		return nil
+	})
+	nrEnd = monkey.Patch(instrumentation.EndTransaction, func(*newrelic.Transaction) {
+		nrEnd.Unpatch()
+		defer nrEnd.Restore()
+		return
+	})
+	kguard = monkey.Patch((*Kafka).GetMetadata, func(_k *Kafka) {
+		kguard.Unpatch()
+		defer kguard.Restore()
+		_k.PartitionCounts = map[string]int{"other": 0}
+	})
+
+	partitionNum := k.GetPartitionNumber("other", "ever")
+	assert.Equal(t, int(partitionNum), -1) //checks in kafka.PartitionAny is returned
+}
+
+func xTestKafkaProduceMessage(t *testing.T) {
 	//TBD
-	assert.Equal(t, "wip", "tbd")
+	assert.Equal(t, "wip", "wip")
 }

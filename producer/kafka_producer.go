@@ -10,8 +10,9 @@ import (
 )
 
 type Kafka struct {
-	ConfigMap kafka.ConfigMap
-	Producer  *kafka.Producer
+	ConfigMap       kafka.ConfigMap
+	Producer        *kafka.Producer
+	PartitionCounts map[string]int
 }
 
 func (k *Kafka) NewProducer() {
@@ -39,9 +40,9 @@ func (k *Kafka) GetMetadata() {
 	if err != nil {
 		return
 	}
-	PartitionCounts = make(map[string]int, len(metadata.Topics))
+	k.PartitionCounts = make(map[string]int, len(metadata.Topics))
 	for topic, _ := range metadata.Topics {
-		PartitionCounts[topic] = len(metadata.Topics[topic].Partitions)
+		k.PartitionCounts[topic] = len(metadata.Topics[topic].Partitions)
 	}
 }
 
@@ -49,12 +50,12 @@ func (k *Kafka) GetPartitionNumber(topic string, messageKey string) (partitionNu
 	txn := instrumentation.StartTransaction("getPartitionNumber_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
 
-	if len(PartitionCounts) == 0 || PartitionCounts[topic] == 0 {
+	if len(k.PartitionCounts) == 0 || k.PartitionCounts[topic] == 0 {
 		k.GetMetadata()
 	}
 
-	if PartitionCounts[topic] != 0 {
-		partitionCount := PartitionCounts[topic]
+	if k.PartitionCounts[topic] != 0 {
+		partitionCount := k.PartitionCounts[topic]
 		partitionChecksum := crc32.ChecksumIEEE([]byte(messageKey))
 		partitionNumber = int32(partitionChecksum % uint32(partitionCount))
 	} else {
