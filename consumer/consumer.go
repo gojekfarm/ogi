@@ -10,6 +10,16 @@ import (
 	logger "github.com/gojekfarm/ogi/logger"
 )
 
+type Consumer interface {
+	Configure()
+	NewConsumer()
+	SubscribeTopics([]string)
+	EventHandler()
+	Close()
+}
+
+type NewConsumerFunc func() Consumer
+
 var (
 	KafkaTopics                  = golenv.OverrideIfEnv("CONSUMER_KAFKA_TOPICS", "")
 	BootstrapServers             = golenv.OverrideIfEnv("CONSUMER_BOOTSTRAP_SERVERS", "")
@@ -18,15 +28,12 @@ var (
 	GoEventsChannelEnable        = golenv.OverrideIfEnv("CONSUMER_GOEVENTS_CHANNEL_ENABLE", "true")
 	GoEventsChannelSize          = golenv.OverrideIfEnv("CONSUMER_GOEVENTS_CHANNEL_SIZE", "1000")
 	GoApplicationRebalanceEnable = golenv.OverrideIfEnv("CONSUMER_GO_APPLICATION_REBALANCE_ENABLE", "true")
-)
+	ConsumerType                 = golenv.OverrideIfEnv("CONSUMER_TYPE", "confluent-kafka")
 
-type Consumer interface {
-	Configure()
-	NewConsumer()
-	SubscribeTopics([]string)
-	EventHandler()
-	Close()
-}
+	consumerMap = map[string]NewConsumerFunc{
+		"confluent-kafka": NewConfluentKafka,
+	}
+)
 
 func validateConfig() {
 	var missingVariables string
@@ -65,11 +72,12 @@ func subscribe(consumer Consumer) {
 	consumer.EventHandler()
 }
 
-func Consume(consumer Consumer) {
+func Consume() {
 	txn := instrumentation.StartTransaction("consume_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
 	validateConfig()
 
+	consumer := consumerMap[ConsumerType]()
 	consumer.Configure()
 	consumer.NewConsumer()
 

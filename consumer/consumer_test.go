@@ -96,14 +96,9 @@ func TestConsume(t *testing.T) {
 		return
 	})
 	setTestConfig()
-	mc := new(MockConsumer)
-	mc.On("Configure").Return()
-	mc.On("NewConsumer").Return()
-	mc.On("Close").Return()
-	Consume(mc)
+	Consume()
 	assert.Equal(t, nrB, true)
 	assert.Equal(t, nrEndB, true)
 	assert.Equal(t, vcB, true)
 	assert.Equal(t, sB, true)
-	mc.Mock.AssertExpectations(t)
 }

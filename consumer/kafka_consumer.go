@@ -96,3 +96,8 @@ func (k *Kafka) EventHandler() {
 func (k *Kafka) Close() {
 	k.Consumer.Close()
 }
+
+func NewConfluentKafka() Consumer {
+	var k Kafka
+	return &k
+}
