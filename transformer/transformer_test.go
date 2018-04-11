@@ -9,9 +9,9 @@ import (
 	newrelic "github.com/newrelic/go-agent"
 	"github.com/stretchr/testify/assert"
 
-	instrumentation "github.com/gojekfarm/kafka-ogi/instrumentation"
-	logger "github.com/gojekfarm/kafka-ogi/logger"
-	ogiproducer "github.com/gojekfarm/kafka-ogi/producer"
+	instrumentation "github.com/gojekfarm/ogi/instrumentation"
+	logger "github.com/gojekfarm/ogi/logger"
+	ogiproducer "github.com/gojekfarm/ogi/producer"
 )
 
 func setTestConfig() {

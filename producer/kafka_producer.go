@@ -5,8 +5,8 @@ import (
 
 	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
 
-	"github.com/gojekfarm/kafka-ogi/instrumentation"
-	"github.com/gojekfarm/kafka-ogi/logger"
+	"github.com/gojekfarm/ogi/instrumentation"
+	"github.com/gojekfarm/ogi/logger"
 )
 
 type Kafka struct {
@@ -97,4 +97,10 @@ func (k *Kafka) ProduceMessage(topic string, message []byte, partitionNumber int
 
 	// wait for delivery report goroutine to finish
 	_ = <-doneChan
+}
+
+func NewConfluentKafka() Producer {
+	k := &Kafka{}
+	k.NewProducer()
+	return k
 }

@@ -6,7 +6,7 @@ import (
 
 	"github.com/abhishekkr/gol/golerror"
 
-	ogiproducer "github.com/gojekfarm/kafka-ogi/producer"
+	ogiproducer "github.com/gojekfarm/ogi/producer"
 )
 
 type KubernetesKafkaLog struct {

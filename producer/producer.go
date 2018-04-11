@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/abhishekkr/gol/golenv"
-	"github.com/gojekfarm/kafka-ogi/instrumentation"
-	"github.com/gojekfarm/kafka-ogi/logger"
+	"github.com/gojekfarm/ogi/instrumentation"
+	"github.com/gojekfarm/ogi/logger"
 )
 
 type Producer interface {
@@ -16,8 +16,15 @@ type Producer interface {
 	ProduceMessage(topic string, message []byte, partitionNumber int32)
 }
 
+type NewProducerFunc func() Producer
+
 var (
 	BootstrapServers = golenv.OverrideIfEnv("PRODUCER_BOOTSTRAP_SERVERS", "")
+	ProducerType     = golenv.OverrideIfEnv("PRODUCER_TYPE", "confluent-kafka")
+
+	producerMap = map[string]NewProducerFunc{
+		"confluent-kafka": NewConfluentKafka,
+	}
 )
 
 func validateConfig() {
@@ -32,9 +39,7 @@ func validateConfig() {
 }
 
 func NewProducer() Producer {
-	k := &Kafka{}
-	k.NewProducer()
-	return k
+	return producerMap[ProducerType]()
 }
 
 func Produce(producer Producer, topic string, message []byte, message_key string) {

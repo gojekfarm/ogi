@@ -1,8 +1,14 @@
-## Kafka-Ogi
+## Ogi
 
 > ![ogi means a japanese fan](docs/ogi.png "ogi means a japanese fan")
+> initially written to fan-out bulk topic `labels[app:appname]` tagged logs pushed from Kubernetes to Kafka, into `app` specific topics
+> evolved to be usable for flexible [ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load) scenarios that can scaled up as multiple instances
 
-service used to pull data from a kafka topic and write to multiple topics based on the hashing logic
+---
+
+#### current scenarios available
+
+* pull data from a kafka topic and write to multiple topics based on the hashing logic
 
 ---
 

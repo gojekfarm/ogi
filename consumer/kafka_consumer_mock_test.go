@@ -1,7 +1,7 @@
 package ogiconsumer
 
 import (
-	logger "github.com/gojekfarm/kafka-ogi/logger"
+	logger "github.com/gojekfarm/ogi/logger"
 	"github.com/stretchr/testify/mock"
 )
 

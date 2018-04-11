@@ -33,7 +33,7 @@ cp env.sample env
 ```
 dep ensure
 source env.sample
-go test -gcflags=-l github.com/gojekfarm/kafka-ogi/consumer
+go test -gcflags=-l github.com/gojekfarm/ogi/transformer github.com/gojekfarm/ogi/producer github.com/gojekfarm/ogi/consumer
 ```
 
 ---

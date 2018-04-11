@@ -8,9 +8,9 @@ import (
 
 	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
 
-	logger "github.com/gojekfarm/kafka-ogi/logger"
-	ogiproducer "github.com/gojekfarm/kafka-ogi/producer"
-	ogitransformer "github.com/gojekfarm/kafka-ogi/transformer"
+	logger "github.com/gojekfarm/ogi/logger"
+	ogiproducer "github.com/gojekfarm/ogi/producer"
+	ogitransformer "github.com/gojekfarm/ogi/transformer"
 )
 
 type Kafka struct {

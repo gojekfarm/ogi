@@ -9,7 +9,7 @@ import (
 	"github.com/bouk/monkey"
 	"github.com/stretchr/testify/assert"
 
-	logger "github.com/gojekfarm/kafka-ogi/logger"
+	logger "github.com/gojekfarm/ogi/logger"
 )
 
 func TestKafkaConfigureWithValidConfig(t *testing.T) {

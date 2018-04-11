@@ -1,8 +1,8 @@
 package main
 
 import (
-	ogiconsumer "github.com/gojekfarm/kafka-ogi/consumer"
-	logger "github.com/gojekfarm/kafka-ogi/logger"
+	ogiconsumer "github.com/gojekfarm/ogi/consumer"
+	logger "github.com/gojekfarm/ogi/logger"
 )
 
 func main() {

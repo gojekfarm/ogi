@@ -3,7 +3,7 @@ package ogitransformer
 import (
 	"github.com/stretchr/testify/mock"
 
-	ogiproducer "github.com/gojekfarm/kafka-ogi/producer"
+	ogiproducer "github.com/gojekfarm/ogi/producer"
 )
 
 type MockKubernetesKafkaLog struct {

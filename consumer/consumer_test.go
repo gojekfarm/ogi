@@ -9,8 +9,8 @@ import (
 	newrelic "github.com/newrelic/go-agent"
 	"github.com/stretchr/testify/assert"
 
-	instrumentation "github.com/gojekfarm/kafka-ogi/instrumentation"
-	logger "github.com/gojekfarm/kafka-ogi/logger"
+	instrumentation "github.com/gojekfarm/ogi/instrumentation"
+	logger "github.com/gojekfarm/ogi/logger"
 )
 
 func TestValdiateConfig(t *testing.T) {

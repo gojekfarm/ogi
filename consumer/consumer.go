@@ -6,8 +6,8 @@ import (
 
 	"github.com/abhishekkr/gol/golenv"
 
-	instrumentation "github.com/gojekfarm/kafka-ogi/instrumentation"
-	logger "github.com/gojekfarm/kafka-ogi/logger"
+	instrumentation "github.com/gojekfarm/ogi/instrumentation"
+	logger "github.com/gojekfarm/ogi/logger"
 )
 
 var (
