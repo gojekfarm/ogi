@@ -2,7 +2,6 @@ package ogiconsumer
 
 import (
 	"fmt"
-	"strings"
 
 	"github.com/abhishekkr/gol/golenv"
 
@@ -13,7 +12,7 @@ import (
 type Consumer interface {
 	Configure()
 	NewConsumer()
-	SubscribeTopics([]string)
+	SubscribeTopics()
 	EventHandler()
 	Close()
 }
@@ -21,7 +20,6 @@ type Consumer interface {
 type NewConsumerFunc func() Consumer
 
 var (
-	KafkaTopics                  = golenv.OverrideIfEnv("CONSUMER_KAFKA_TOPICS", "")
 	BootstrapServers             = golenv.OverrideIfEnv("CONSUMER_BOOTSTRAP_SERVERS", "")
 	GroupId                      = golenv.OverrideIfEnv("CONSUMER_GROUP_ID", "")
 	SessionTimeoutMs             = golenv.OverrideIfEnv("CONSUMER_SESSION_TIMEOUT_MS", "6000")
@@ -38,7 +36,7 @@ var (
 func validateConfig() {
 	var missingVariables string
 	if KafkaTopics == "" {
-		missingVariables = fmt.Sprintf("%s CONSUMER_KAFKA_TOPICS", missingVariables)
+		logger.Warn("Missing Env Config: 'CONSUMER_KAFKA_TOPICS, can't use Kafka based transformers")
 	}
 	if BootstrapServers == "" {
 		missingVariables = fmt.Sprintf("%s CONSUMER_BOOTSTRAP_SERVERS", missingVariables)
@@ -61,13 +59,7 @@ func failIfError(err error) {
 func subscribe(consumer Consumer) {
 	txn := instrumentation.StartTransaction("subscribe_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
-
-	topics := strings.Split(KafkaTopics, ",")
-	if len(topics) == 1 && topics[0] == "" {
-		logger.Fatal("no topic provided to consume")
-	}
-	logger.Debug(topics)
-	consumer.SubscribeTopics(topics)
+	consumer.SubscribeTopics()
 
 	consumer.EventHandler()
 }

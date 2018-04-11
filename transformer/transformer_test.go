@@ -15,7 +15,7 @@ import (
 )
 
 func setTestConfig() {
-	KafkaTopicLabel = "app"
+	KubernetesTopicLabel = "app"
 	TransformerType = "kubernetes-kafka-log"
 
 	transformerMap = map[string]NewLogTransformer{
@@ -25,7 +25,7 @@ func setTestConfig() {
 }
 
 func unsetTestConfig() {
-	KafkaTopicLabel = ""
+	KubernetesTopicLabel = ""
 	TransformerType = ""
 
 	transformerMap = map[string]NewLogTransformer{}

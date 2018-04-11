@@ -18,7 +18,6 @@ type LogTransformer interface {
 type NewLogTransformer func() LogTransformer
 
 var (
-	KafkaTopicLabel = golenv.OverrideIfEnv("PRODUCER_KAFKA_TOPIC_LABEL", "app")
 	TransformerType = golenv.OverrideIfEnv("TRANSFORMER_TYPE", "kubernetes-kafka-log")
 
 	transformerMap = map[string]NewLogTransformer{
@@ -29,9 +28,10 @@ var (
 
 func validateConfig() {
 	var missingVariables string
-	if KafkaTopicLabel == "" {
-		missingVariables = fmt.Sprintf("%s PRODUCER_KAFKA_TOPIC_LABEL", missingVariables)
+	if KubernetesTopicLabel == "" {
+		logger.Warn("Missing Env Config: 'PRODUCER_KUBERNETES_TOPIC_LABEL', can't use Kubernetes Label based transformers")
 	}
+
 	if TransformerType == "" {
 		missingVariables = fmt.Sprintf("%s TRANSFORMER_TYPE", missingVariables)
 	}
@@ -45,8 +45,8 @@ func Transform(producer ogiproducer.Producer, msg string) {
 	txn := instrumentation.StartTransaction("transform_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
 
-	kafkaLog := transformerMap[TransformerType]()
-	if err := kafkaLog.Transform(msg, producer); err != nil {
+	transformer := transformerMap[TransformerType]()
+	if err := transformer.Transform(msg, producer); err != nil {
 		logger.Warn(err)
 	}
 }

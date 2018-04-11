@@ -4,8 +4,10 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
+	"strings"
 	"syscall"
 
+	"github.com/abhishekkr/gol/golenv"
 	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
 
 	logger "github.com/gojekfarm/ogi/logger"
@@ -17,6 +19,10 @@ type Kafka struct {
 	ConfigMap kafka.ConfigMap
 	Consumer  *kafka.Consumer
 }
+
+var (
+	KafkaTopics = golenv.OverrideIfEnv("CONSUMER_KAFKA_TOPICS", "")
+)
 
 func (k *Kafka) Configure() {
 	sessionTimeoutMs, err := strconv.Atoi(SessionTimeoutMs)
@@ -48,7 +54,13 @@ func (k *Kafka) NewConsumer() {
 	}
 }
 
-func (k *Kafka) SubscribeTopics(topics []string) {
+func (k *Kafka) SubscribeTopics() {
+	logger.Debug(KafkaTopics)
+	topics := strings.Split(KafkaTopics, ",")
+	if len(topics) == 1 && topics[0] == "" {
+		logger.Fatal("no topic provided to consume")
+	}
+
 	err := k.Consumer.SubscribeTopics(topics, nil)
 	failIfError(err)
 	logger.Debug(k.Consumer)

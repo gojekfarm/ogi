@@ -48,7 +48,7 @@ func TestFailIfError(t *testing.T) {
 func TestSubscribeForValidTopic(t *testing.T) {
 	setTestConfig()
 	mc := new(MockConsumer)
-	mc.On("SubscribeTopics", []string{"bulk-topic"}).Return()
+	mc.On("SubscribeTopics").Return()
 	mc.On("EventHandler").Return()
 	subscribe(mc)
 }

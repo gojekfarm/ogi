@@ -19,8 +19,8 @@ func (k *MockConsumer) NewConsumer() {
 	return
 }
 
-func (k *MockConsumer) SubscribeTopics(topics []string) {
-	k.Mock.Called(topics)
+func (k *MockConsumer) SubscribeTopics() {
+	k.Mock.Called()
 	return
 }
 

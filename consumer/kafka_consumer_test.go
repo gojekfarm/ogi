@@ -109,7 +109,7 @@ func TestKafkaSubscribeTopicsSuccess(t *testing.T) {
 		return nil
 	})
 
-	k.SubscribeTopics([]string{"bulk-topic"})
+	k.SubscribeTopics()
 	assert.True(t, guardB)
 }
 
@@ -131,8 +131,8 @@ func TestKafkaSubscribeTopicsFailure(t *testing.T) {
 		panic("mocked")
 	})
 
-	assert.Panicsf(t, func() { k.SubscribeTopics([]string{"bulk-topic"}) }, "mocked")
-	assert.True(t, guardB)
+	assert.Panicsf(t, func() { k.SubscribeTopics() }, "mocked")
+	assert.False(t, guardB)
 }
 
 func TestKafkaEventHandler(t *testing.T) {

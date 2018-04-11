@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/abhishekkr/gol/golenv"
 	"github.com/abhishekkr/gol/golerror"
 
 	ogiproducer "github.com/gojekfarm/ogi/producer"
@@ -32,6 +33,10 @@ type Kubernetes struct {
 	MasterUrl     string            `json:"master_url"`
 }
 
+var (
+	KubernetesTopicLabel = golenv.OverrideIfEnv("PRODUCER_KUBERNETES_TOPIC_LABEL", "app")
+)
+
 func (kafkaLog *KubernetesKafkaLog) Transform(msg string, producer ogiproducer.Producer) (err error) {
 	msgBytes := []byte(msg)
 
@@ -40,8 +45,8 @@ func (kafkaLog *KubernetesKafkaLog) Transform(msg string, producer ogiproducer.P
 		return
 	}
 
-	if kafkaLog.Kubernetes.Labels[KafkaTopicLabel] == "" {
-		err = golerror.Error(123, fmt.Sprintf("correct target topic id '%s' is missing", KafkaTopicLabel))
+	if kafkaLog.Kubernetes.Labels[KubernetesTopicLabel] == "" {
+		err = golerror.Error(123, fmt.Sprintf("correct target topic id '%s' is missing", KubernetesTopicLabel))
 		return
 	}
 
@@ -50,7 +55,7 @@ func (kafkaLog *KubernetesKafkaLog) Transform(msg string, producer ogiproducer.P
 	msgWithKey, err := json.Marshal(kafkaLog)
 
 	ogiproducer.Produce(producer,
-		kafkaLog.Kubernetes.Labels[KafkaTopicLabel],
+		kafkaLog.Kubernetes.Labels[KubernetesTopicLabel],
 		msgWithKey,
 		kafkaLog.MessageKey)
 	return
