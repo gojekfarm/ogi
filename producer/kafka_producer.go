@@ -6,7 +6,7 @@ import (
 	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
 
 	"github.com/gojekfarm/ogi/instrumentation"
-	"github.com/gojekfarm/ogi/logger"
+	logger "github.com/gojekfarm/ogi/logger"
 )
 
 type Kafka struct {

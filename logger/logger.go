@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var logger *logrus.Logger
+var ogilogger *logrus.Logger
 
 func SetupLogger() {
 	level, err := logrus.ParseLevel(golenv.OverrideIfEnv("LOG_LEVEL", "info"))
@@ -16,7 +16,7 @@ func SetupLogger() {
 		log.Fatal(err)
 	}
 
-	logger = &logrus.Logger{
+	ogilogger = &logrus.Logger{
 		Out:       os.Stdout,
 		Formatter: &logrus.JSONFormatter{},
 		Hooks:     make(logrus.LevelHooks),
@@ -25,61 +25,61 @@ func SetupLogger() {
 }
 
 func Debug(args ...interface{}) {
-	logger.Debug(args...)
+	ogilogger.Debug(args...)
 }
 
 func Debugf(format string, args ...interface{}) {
-	logger.Debugf(format, args...)
+	ogilogger.Debugf(format, args...)
 }
 
 func Debugln(args ...interface{}) {
-	logger.Debugln(args...)
+	ogilogger.Debugln(args...)
 }
 
 func Error(args ...interface{}) {
-	logger.Error(args...)
+	ogilogger.Error(args...)
 }
 
 func Errorf(format string, args ...interface{}) {
-	logger.Errorf(format, args...)
+	ogilogger.Errorf(format, args...)
 }
 
 func Errorln(args ...interface{}) {
-	logger.Errorln(args...)
+	ogilogger.Errorln(args...)
 }
 
 func Fatal(args ...interface{}) {
-	logger.Fatal(args...)
+	ogilogger.Fatal(args...)
 }
 
 func Fatalf(format string, args ...interface{}) {
-	logger.Fatalf(format, args...)
+	ogilogger.Fatalf(format, args...)
 }
 
 func Fatalln(args ...interface{}) {
-	logger.Fatalln(args...)
+	ogilogger.Fatalln(args...)
 }
 
 func Info(args ...interface{}) {
-	logger.Info(args...)
+	ogilogger.Info(args...)
 }
 
 func Infof(format string, args ...interface{}) {
-	logger.Infof(format, args...)
+	ogilogger.Infof(format, args...)
 }
 
 func Infoln(args ...interface{}) {
-	logger.Infoln(args...)
+	ogilogger.Infoln(args...)
 }
 
 func Warn(args ...interface{}) {
-	logger.Warn(args...)
+	ogilogger.Warn(args...)
 }
 
 func Warnf(format string, args ...interface{}) {
-	logger.Warnf(format, args...)
+	ogilogger.Warnf(format, args...)
 }
 
 func Warnln(args ...interface{}) {
-	logger.Warnln(args...)
+	ogilogger.Warnln(args...)
 }

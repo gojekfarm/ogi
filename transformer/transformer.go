@@ -7,7 +7,7 @@ import (
 
 	"github.com/gojekfarm/ogi/instrumentation"
 
-	"github.com/gojekfarm/ogi/logger"
+	logger "github.com/gojekfarm/ogi/logger"
 	ogiproducer "github.com/gojekfarm/ogi/producer"
 )
 
@@ -47,6 +47,7 @@ func Transform(producer ogiproducer.Producer, msg string) {
 
 	transformer := transformerMap[TransformerType]()
 	if err := transformer.Transform(msg, producer); err != nil {
+		// produce to dead-man-talking topic
 		logger.Warn(err)
 	}
 }

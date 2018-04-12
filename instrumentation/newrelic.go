@@ -6,7 +6,7 @@ import (
 	"github.com/abhishekkr/gol/golenv"
 	newrelic "github.com/newrelic/go-agent"
 
-	"github.com/gojekfarm/ogi/logger"
+	logger "github.com/gojekfarm/ogi/logger"
 )
 
 type NewrelicCtx struct {

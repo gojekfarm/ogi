@@ -11,7 +11,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/gojekfarm/ogi/instrumentation"
-	"github.com/gojekfarm/ogi/logger"
+	logger "github.com/gojekfarm/ogi/logger"
 )
 
 func TestKafkaNewProducerSuccess(t *testing.T) {

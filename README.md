@@ -1,8 +1,24 @@
 ## Ogi
 
 > ![ogi means a japanese fan](docs/ogi.png "ogi means a japanese fan")
+>
 > initially written to fan-out bulk topic `labels[app:appname]` tagged logs pushed from Kubernetes to Kafka, into `app` specific topics
+>
 > evolved to be usable for flexible [ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load) scenarios that can scaled up as multiple instances
+
+---
+
+#### way it works
+
+* has a consumer, runs Subscribe on it... then calls its EventHandler
+> consumer's EventHandler could choose desired flow for every event received
+
+* events could pass details and desired producer for it to Transformer, transformer follows it's own computation and pass on updated state to producer
+> if no transformation is required for this `consumer`, the Producer could be triggered directly as well
+
+* producer just does that, produce message to required target
+
+> here all 3, `consumer`, `transformer` and `producer` are instantiated as per config and thus any combination of available types could be brought into play
 
 ---
 
