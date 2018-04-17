@@ -18,7 +18,7 @@ func setTestConfig() {
 	KubernetesTopicLabel = "app"
 	TransformerType = "kubernetes-kafka-log"
 
-	transformerMap = map[string]NewLogTransformer{
+	transformerMap = map[string]NewTransformer{
 		"kubernetes-kafka-log": NewKubernetesKafkaLog,
 		"mock":                 NewMockKafkaLog,
 	}
@@ -28,7 +28,7 @@ func unsetTestConfig() {
 	KubernetesTopicLabel = ""
 	TransformerType = ""
 
-	transformerMap = map[string]NewLogTransformer{}
+	transformerMap = map[string]NewTransformer{}
 }
 
 func TestValdiateConfig(t *testing.T) {

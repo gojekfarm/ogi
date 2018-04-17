@@ -30,6 +30,7 @@ var (
 
 	consumerMap = map[string]NewConsumerFunc{
 		"confluent-kafka": NewConfluentKafka,
+		"plugin":          NewConsumerPlugin,
 	}
 )
 

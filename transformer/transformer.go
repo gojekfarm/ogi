@@ -11,18 +11,18 @@ import (
 	ogiproducer "github.com/gojekfarm/ogi/producer"
 )
 
-type LogTransformer interface {
+type Transformer interface {
 	Transform(string, ogiproducer.Producer) error
 }
 
-type NewLogTransformer func() LogTransformer
+type NewTransformer func() Transformer
 
 var (
 	TransformerType = golenv.OverrideIfEnv("TRANSFORMER_TYPE", "kubernetes-kafka-log")
 
-	transformerMap = map[string]NewLogTransformer{
-		"message-log":          NewMessageLog,
+	transformerMap = map[string]NewTransformer{
 		"kubernetes-kafka-log": NewKubernetesKafkaLog,
+		"plugin":               NewTransformerPlugin,
 	}
 )
 

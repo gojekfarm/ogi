@@ -61,6 +61,6 @@ func (kafkaLog *KubernetesKafkaLog) Transform(msg string, producer ogiproducer.P
 	return
 }
 
-func NewKubernetesKafkaLog() LogTransformer {
+func NewKubernetesKafkaLog() Transformer {
 	return &KubernetesKafkaLog{}
 }

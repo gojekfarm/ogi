@@ -15,6 +15,6 @@ func (k *MockKubernetesKafkaLog) Transform(msg string, producer ogiproducer.Prod
 	return nil
 }
 
-func NewMockKafkaLog() LogTransformer {
+func NewMockKafkaLog() Transformer {
 	return &MockKubernetesKafkaLog{}
 }
