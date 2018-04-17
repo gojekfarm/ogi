@@ -110,6 +110,10 @@ func (k *Kafka) Close() {
 }
 
 func NewConfluentKafka() Consumer {
+	if KafkaTopics == "" {
+		logger.Fatalln("Missing Env Config: 'CONSUMER_KAFKA_TOPICS, can't use Kafka based transformers")
+	}
+
 	var k Kafka
 	return &k
 }

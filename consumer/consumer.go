@@ -36,9 +36,6 @@ var (
 
 func validateConfig() {
 	var missingVariables string
-	if KafkaTopics == "" {
-		logger.Warn("Missing Env Config: 'CONSUMER_KAFKA_TOPICS, can't use Kafka based transformers")
-	}
 	if BootstrapServers == "" {
 		missingVariables = fmt.Sprintf("%s CONSUMER_BOOTSTRAP_SERVERS", missingVariables)
 	}
