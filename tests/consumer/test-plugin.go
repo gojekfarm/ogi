@@ -1,10 +1,14 @@
 package main
 
+type TestConsumerPlugin struct {
+}
+
 var (
 	p *TestConsumerPlugin
 )
 
-type TestConsumerPlugin struct {
+func init() {
+	p = new(TestConsumerPlugin)
 }
 
 func (k *TestConsumerPlugin) Configure() {

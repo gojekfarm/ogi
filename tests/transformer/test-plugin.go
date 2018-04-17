@@ -11,6 +11,10 @@ var (
 	p *TestTransformerLog
 )
 
+func init() {
+	p = new(TestTransformerLog)
+}
+
 func (msgLog *TestTransformerLog) Transform(msg string, producer ogiproducer.Producer) (err error) {
 	return
 }
