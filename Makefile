@@ -9,8 +9,10 @@ build-deps: setup
 	dep ensure
 
 compile: build-deps
-	mkdir -p out/
-	go build -o out/ogi main.go
+	mkdir -p out
+
+	GOOS=linux GOARCH=amd64 go build -o out/ogi main.go
+
 	cd plugin-examples/transformer/message_logs ; \
 		go build -o "../../../out/transformer-message-log.so" -buildmode=plugin . ; \
 		cd -

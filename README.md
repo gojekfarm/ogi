@@ -21,7 +21,7 @@
 > here all 3, `consumer`, `transformer` and `producer` are instantiated as per config and thus any combination of available types could be brought into play
 > all 3 support usage of plugin, so separately managed and developed constructs could be used in combination
 
-> _this uses `[golang plugins](https://golang.org/pkg/plugin/)` for extensibility, currently supported on linux, utilize docker to run if using something else_
+> _this uses [golang plugins](https://golang.org/pkg/plugin/) for extensibility, currently supported on linux, utilize docker to run if using something else_
 
 [set of configurations to make ogi work to specific behavior](./docs/config-set.md)
 
