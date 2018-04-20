@@ -11,9 +11,7 @@ import (
 type Producer interface {
 	NewProducer()
 	Close()
-	GetMetadata()
-	GetPartitionNumber(topic string, messageKey string) (partitionNumber int32)
-	ProduceMessage(topic string, message []byte, partitionNumber int32)
+	Produce(string, []byte, string)
 }
 
 type NewProducerFunc func() Producer
@@ -42,11 +40,13 @@ func NewProducer() Producer {
 	return producerMap[ProducerType]()
 }
 
-func Produce(producer Producer, topic string, message []byte, message_key string) {
+func Produce(topic string, message []byte, messageKey string) {
 	txn := instrumentation.StartTransaction("produce_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
 
-	partitionNumber := producer.GetPartitionNumber(topic, message_key)
-	producer.ProduceMessage(topic, message, partitionNumber)
-	logger.Infof("topic '%s' message-key '%s' is assigned to '%d' partition", topic, message_key, partitionNumber)
+	producer := NewProducer()
+	defer producer.Close()
+
+	producer.Produce(topic, message, messageKey)
+	logger.Infof("topic '%s' message-key '%s'", topic, messageKey)
 }

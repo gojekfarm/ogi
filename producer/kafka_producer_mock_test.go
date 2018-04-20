@@ -19,17 +19,7 @@ func (k *MockProducer) Close() {
 	return
 }
 
-func (k *MockProducer) GetMetadata() {
-	k.Mock.Called()
-	return
-}
-
-func (k *MockProducer) GetPartitionNumber(topic string, messageKey string) (partitionNumber int32) {
-	k.Mock.Called()
-	return
-}
-
-func (k *MockProducer) ProduceMessage(topic string, message []byte, partitionNumber int32) {
+func (k *MockProducer) Produce(topic string, message []byte, messageKey string) {
 	k.Mock.Called()
 	return
 }

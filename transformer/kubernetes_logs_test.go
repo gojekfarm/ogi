@@ -63,7 +63,7 @@ func TestKubernetesKafkaLogTransformSuccess(t *testing.T) {
 	var guard *monkey.PatchGuard
 	var guardB bool
 	var guardMessage, guardKey, guardTopic string
-	guard = monkey.Patch(ogiproducer.Produce, func(producer ogiproducer.Producer, topic string, message []byte, message_key string) {
+	guard = monkey.Patch(ogiproducer.Produce, func(topic string, message []byte, message_key string) {
 		guard.Unpatch()
 		defer guard.Restore()
 		guardB = true
@@ -71,10 +71,8 @@ func TestKubernetesKafkaLogTransformSuccess(t *testing.T) {
 		return
 	})
 
-	producer := new(ogiproducer.Kafka)
-
 	kkl := KubernetesKafkaLog{}
-	err = kkl.Transform(kubernetesKafkaLogMessage, producer)
+	err = kkl.Transform(kubernetesKafkaLogMessage)
 	assert.Nil(t, err)
 
 	actual := reg.ReplaceAllString(string(guardMessage), "")
@@ -92,7 +90,7 @@ func TestKubernetesKafkaLogTransformUnmarshallError(t *testing.T) {
 	}`
 
 	kkl := KubernetesKafkaLog{}
-	err := kkl.Transform(kubernetesKafkaLogMessageBad, nil)
+	err := kkl.Transform(kubernetesKafkaLogMessageBad)
 	assert.NotNil(t, err)
 }
 
@@ -118,6 +116,6 @@ func TestKubernetesKafkaLogTransformNoTopicLabel(t *testing.T) {
 	}`
 
 	kkl := KubernetesKafkaLog{}
-	err := kkl.Transform(kubernetesKafkaLogMessageWithoutTopic, nil)
+	err := kkl.Transform(kubernetesKafkaLogMessageWithoutTopic)
 	assert.NotNil(t, err)
 }

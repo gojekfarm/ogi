@@ -37,7 +37,7 @@ var (
 	KubernetesTopicLabel = golenv.OverrideIfEnv("PRODUCER_KUBERNETES_TOPIC_LABEL", "app")
 )
 
-func (kafkaLog *KubernetesKafkaLog) Transform(msg string, producer ogiproducer.Producer) (err error) {
+func (kafkaLog *KubernetesKafkaLog) Transform(msg string) (err error) {
 	msgBytes := []byte(msg)
 
 	if err = json.Unmarshal(msgBytes, &kafkaLog); err != nil {
@@ -54,8 +54,7 @@ func (kafkaLog *KubernetesKafkaLog) Transform(msg string, producer ogiproducer.P
 
 	msgWithKey, err := json.Marshal(kafkaLog)
 
-	ogiproducer.Produce(producer,
-		kafkaLog.Kubernetes.Labels[KubernetesTopicLabel],
+	ogiproducer.Produce(kafkaLog.Kubernetes.Labels[KubernetesTopicLabel],
 		msgWithKey,
 		kafkaLog.MessageKey)
 	return

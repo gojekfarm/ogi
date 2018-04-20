@@ -11,7 +11,6 @@ import (
 
 	instrumentation "github.com/gojekfarm/ogi/instrumentation"
 	logger "github.com/gojekfarm/ogi/logger"
-	ogiproducer "github.com/gojekfarm/ogi/producer"
 )
 
 func setTestConfig() {
@@ -64,7 +63,7 @@ func TestTransformSuccess(t *testing.T) {
 		nrEndB = true
 		return
 	})
-	guard = monkey.Patch((*KubernetesKafkaLog).Transform, func(*KubernetesKafkaLog, string, ogiproducer.Producer) error {
+	guard = monkey.Patch((*KubernetesKafkaLog).Transform, func(*KubernetesKafkaLog, string) error {
 		guard.Unpatch()
 		defer guard.Restore()
 		guardB = true
@@ -77,7 +76,7 @@ func TestTransformSuccess(t *testing.T) {
 		return
 	})
 
-	Transform(&ogiproducer.Kafka{}, "{}")
+	Transform("{}")
 	assert.True(t, nrB)
 	assert.True(t, nrEndB)
 	assert.True(t, guardB)
@@ -99,7 +98,7 @@ func TestTransformFailure(t *testing.T) {
 		defer nrEnd.Restore()
 		return
 	})
-	guard = monkey.Patch((*KubernetesKafkaLog).Transform, func(*KubernetesKafkaLog, string, ogiproducer.Producer) error {
+	guard = monkey.Patch((*KubernetesKafkaLog).Transform, func(*KubernetesKafkaLog, string) error {
 		guard.Unpatch()
 		defer guard.Restore()
 		guardB = true
@@ -112,7 +111,7 @@ func TestTransformFailure(t *testing.T) {
 		return
 	})
 
-	Transform(&ogiproducer.Kafka{}, "{}")
+	Transform("{}")
 	assert.True(t, guardB)
 	assert.True(t, logrguardB)
 }

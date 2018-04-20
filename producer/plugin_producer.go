@@ -9,12 +9,10 @@ import (
 )
 
 type ProducerPlugin struct {
-	Name                   string
-	NewProducerFunc        plugin.Symbol
-	CloseFunc              plugin.Symbol
-	GetMetadataFunc        plugin.Symbol
-	GetPartitionNumberFunc plugin.Symbol
-	ProduceMessageFunc     plugin.Symbol
+	Name            string
+	NewProducerFunc plugin.Symbol
+	CloseFunc       plugin.Symbol
+	ProduceFunc     plugin.Symbol
 }
 
 var (
@@ -37,28 +35,16 @@ func NewProducerPlugin() Producer {
 		logger.Fatalf("Error looking up 'Close': %s", err)
 	}
 
-	getMetadataFunc, err := p.Lookup("GetMetadata")
+	produceFunc, err := p.Lookup("Produce")
 	if err != nil {
-		logger.Fatalf("Error looking up 'GetMetadata': %s", err)
-	}
-
-	getPartitionNumberFunc, err := p.Lookup("GetPartitionNumber")
-	if err != nil {
-		logger.Fatalf("Error looking up 'GetPartitionNumber': %s", err)
-	}
-
-	producerMessageFunc, err := p.Lookup("ProduceMessage")
-	if err != nil {
-		logger.Fatalf("Error looking up 'ProduceMessage': %s", err)
+		logger.Fatalf("Error looking up 'Produce': %s", err)
 	}
 
 	return &ProducerPlugin{
-		Name:                   path.Base(ProducerPluginPath),
-		NewProducerFunc:        newProducerFunc,
-		CloseFunc:              closeFunc,
-		GetMetadataFunc:        getMetadataFunc,
-		GetPartitionNumberFunc: getPartitionNumberFunc,
-		ProduceMessageFunc:     producerMessageFunc,
+		Name:            path.Base(ProducerPluginPath),
+		NewProducerFunc: newProducerFunc,
+		CloseFunc:       closeFunc,
+		ProduceFunc:     produceFunc,
 	}
 }
 
@@ -70,14 +56,6 @@ func (plugin *ProducerPlugin) Close() {
 	plugin.CloseFunc.(func())()
 }
 
-func (plugin *ProducerPlugin) GetMetadata() {
-	plugin.GetMetadataFunc.(func())()
-}
-
-func (plugin *ProducerPlugin) GetPartitionNumber(topic string, messageKey string) (partitionNumber int32) {
-	return plugin.GetPartitionNumberFunc.(func(string, string) int32)(topic, messageKey)
-}
-
-func (plugin *ProducerPlugin) ProduceMessage(topic string, message []byte, partitionNumber int32) {
-	plugin.ProduceMessageFunc.(func(string, []byte, int32))(topic, message, partitionNumber)
+func (plugin *ProducerPlugin) Produce(topic string, message []byte, messageKey string) {
+	plugin.ProduceFunc.(func(string, []byte, string))(topic, message, messageKey)
 }

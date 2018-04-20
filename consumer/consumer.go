@@ -10,11 +10,7 @@ import (
 )
 
 type Consumer interface {
-	Configure()
-	NewConsumer()
-	SubscribeTopics()
-	EventHandler()
-	Close()
+	Consume()
 }
 
 type NewConsumerFunc func() Consumer
@@ -54,25 +50,11 @@ func failIfError(err error) {
 	}
 }
 
-func subscribe(consumer Consumer) {
-	txn := instrumentation.StartTransaction("subscribe_transaction", nil, nil)
-	defer instrumentation.EndTransaction(&txn)
-	consumer.SubscribeTopics()
-
-	consumer.EventHandler()
-}
-
 func Consume() {
 	txn := instrumentation.StartTransaction("consume_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
 	validateConfig()
 
 	consumer := consumerMap[ConsumerType]()
-	consumer.Configure()
-	consumer.NewConsumer()
-
-	subscribe(consumer)
-
-	logger.Infof("Closing consumer\n")
-	consumer.Close()
+	consumer.Consume()
 }

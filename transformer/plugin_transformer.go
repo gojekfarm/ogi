@@ -8,7 +8,6 @@ import (
 	"github.com/abhishekkr/gol/golenv"
 
 	logger "github.com/gojekfarm/ogi/logger"
-	ogiproducer "github.com/gojekfarm/ogi/producer"
 )
 
 type TransformerPlugin struct {
@@ -38,6 +37,6 @@ func NewTransformerPlugin() Transformer {
 	}
 }
 
-func (plugin *TransformerPlugin) Transform(msg string, producer ogiproducer.Producer) error {
-	return plugin.TransformFunc.(func(string, ogiproducer.Producer) error)(msg, producer)
+func (plugin *TransformerPlugin) Transform(msg string) error {
+	return plugin.TransformFunc.(func(string) error)(msg)
 }

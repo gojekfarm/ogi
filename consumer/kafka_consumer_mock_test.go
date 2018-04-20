@@ -9,32 +9,20 @@ type MockConsumer struct {
 	mock.Mock
 }
 
-func (k *MockConsumer) Configure() {
+func (k *MockConsumer) Consume() {
 	k.Mock.Called()
 	return
 }
 
-func (k *MockConsumer) NewConsumer() {
-	k.Mock.Called()
-	return
-}
-
-func (k *MockConsumer) SubscribeTopics() {
-	k.Mock.Called()
-	return
-}
-
-func (k *MockConsumer) EventHandler() {
-	k.Mock.Called()
-	return
-}
-
-func (k *MockConsumer) Close() {
-	k.Mock.Called()
-	return
+func NewMockConsumer() Consumer {
+	var k MockConsumer
+	return &k
 }
 
 func setTestConfig() {
+	ConsumerType = "mock"
+	consumerMap["mock"] = NewMockConsumer
+
 	KafkaTopics = "bulk-topic"
 	BootstrapServers = "my-kafaka.server"
 	GroupId = "ogi-group"

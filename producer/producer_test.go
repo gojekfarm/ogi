@@ -47,7 +47,8 @@ func TestNewProducer(t *testing.T) {
 func TestProduce(t *testing.T) {
 	setTestConfig()
 
-	var nr, nrEnd *monkey.PatchGuard
+	mp := &MockProducer{}
+	var nr, nrEnd, producerGuard *monkey.PatchGuard
 	var nrB, nrEndB bool
 	nr = monkey.Patch(instrumentation.StartTransaction, func(string, http.ResponseWriter, *http.Request) newrelic.Transaction {
 		nr.Unpatch()
@@ -61,11 +62,15 @@ func TestProduce(t *testing.T) {
 		nrEndB = true
 		return
 	})
+	producerGuard = monkey.Patch(NewProducer, func() Producer {
+		producerGuard.Unpatch()
+		defer producerGuard.Restore()
+		return mp
+	})
 
-	mp := &MockProducer{}
-	mp.On("GetPartitionNumber").Return(1)
-	mp.On("ProduceMessage").Return()
-	Produce(mp, "topik", []byte{}, "key")
+	mp.On("Produce").Return()
+	mp.On("Close").Return()
+	Produce("topik", []byte{}, "key")
 	assert.True(t, nrB)
 	assert.True(t, nrEndB)
 	mp.Mock.AssertExpectations(t)

@@ -8,11 +8,10 @@ import (
 	"github.com/gojekfarm/ogi/instrumentation"
 
 	logger "github.com/gojekfarm/ogi/logger"
-	ogiproducer "github.com/gojekfarm/ogi/producer"
 )
 
 type Transformer interface {
-	Transform(string, ogiproducer.Producer) error
+	Transform(string) error
 }
 
 type NewTransformer func() Transformer
@@ -41,12 +40,12 @@ func validateConfig() {
 	}
 }
 
-func Transform(producer ogiproducer.Producer, msg string) {
+func Transform(msg string) {
 	txn := instrumentation.StartTransaction("transform_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
 
 	transformer := transformerMap[TransformerType]()
-	if err := transformer.Transform(msg, producer); err != nil {
+	if err := transformer.Transform(msg); err != nil {
 		// produce to dead-man-talking topic
 		logger.Warn(err)
 	}

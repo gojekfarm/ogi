@@ -10,8 +10,8 @@ import (
 	"github.com/abhishekkr/gol/golenv"
 	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
 
+	instrumentation "github.com/gojekfarm/ogi/instrumentation"
 	logger "github.com/gojekfarm/ogi/logger"
-	ogiproducer "github.com/gojekfarm/ogi/producer"
 	ogitransformer "github.com/gojekfarm/ogi/transformer"
 )
 
@@ -67,9 +67,6 @@ func (k *Kafka) SubscribeTopics() {
 }
 
 func (k *Kafka) EventHandler() {
-	producer := ogiproducer.NewProducer()
-	defer producer.Close()
-
 	sigchan := make(chan os.Signal, 1)
 	signal.Notify(sigchan, syscall.SIGINT, syscall.SIGTERM)
 
@@ -92,7 +89,9 @@ func (k *Kafka) EventHandler() {
 				k.Consumer.Unassign()
 
 			case *kafka.Message:
-				ogitransformer.Transform(producer, string(e.Value))
+				txn := instrumentation.StartTransaction("event_kafka_message_transaction", nil, nil)
+				ogitransformer.Transform(string(e.Value))
+				instrumentation.EndTransaction(&txn)
 
 			case kafka.PartitionEOF:
 				logger.Infof("%% Reached %v\n", e)
@@ -107,6 +106,18 @@ func (k *Kafka) EventHandler() {
 
 func (k *Kafka) Close() {
 	k.Consumer.Close()
+}
+
+func (k *Kafka) Consume() {
+	k.Configure()
+	k.NewConsumer()
+
+	k.SubscribeTopics()
+
+	k.EventHandler()
+
+	logger.Infof("Closing consumer\n")
+	k.Close()
 }
 
 func NewConfluentKafka() Consumer {

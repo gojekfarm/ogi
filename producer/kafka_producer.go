@@ -99,6 +99,11 @@ func (k *Kafka) ProduceMessage(topic string, message []byte, partitionNumber int
 	_ = <-doneChan
 }
 
+func (k *Kafka) Produce(topic string, message []byte, messageKey string) {
+	partitionNumber := k.GetPartitionNumber(topic, messageKey)
+	k.ProduceMessage(topic, message, partitionNumber)
+}
+
 func NewConfluentKafka() Producer {
 	k := &Kafka{}
 	k.NewProducer()
