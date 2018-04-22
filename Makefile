@@ -3,7 +3,8 @@ all: build test
 
 
 setup:
-	go get -u github.com/golang/dep/cmd/dep
+	if which dep &> /dev/null ; then go get -u github.com/golang/dep/cmd/dep ; fi
+
 
 build-deps: setup
 	dep ensure

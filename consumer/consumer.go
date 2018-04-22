@@ -30,6 +30,10 @@ var (
 	}
 )
 
+func init() {
+	validateConfig()
+}
+
 func validateConfig() {
 	var missingVariables string
 	if BootstrapServers == "" {
@@ -53,7 +57,6 @@ func failIfError(err error) {
 func Consume() {
 	txn := instrumentation.StartTransaction("consume_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
-	validateConfig()
 
 	consumer := consumerMap[ConsumerType]()
 	consumer.Consume()

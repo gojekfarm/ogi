@@ -25,6 +25,10 @@ var (
 	}
 )
 
+func init() {
+	validateConfig()
+}
+
 func validateConfig() {
 	var missingVariables string
 	if KubernetesTopicLabel == "" {

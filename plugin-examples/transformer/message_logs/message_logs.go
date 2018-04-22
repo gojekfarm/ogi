@@ -20,7 +20,7 @@ func init() {
 	messageLog = new(MessageLog)
 }
 
-func (msgLog *MessageLog) Transform(msg string, producer ogiproducer.Producer) (err error) {
+func (msgLog *MessageLog) Transform(msg string) (err error) {
 	logger.Infoln("message recieved is", msg)
 	msgTokens := strings.Split(msg, ",")
 
@@ -33,13 +33,12 @@ func (msgLog *MessageLog) Transform(msg string, producer ogiproducer.Producer) (
 	msgLog.Topic = msgTokens[0]
 	msgLog.Key = msgTokens[1]
 
-	ogiproducer.Produce(producer,
-		msgLog.Topic,
+	ogiproducer.Produce(msgLog.Topic,
 		[]byte(msg),
 		msgLog.Key)
 	return
 }
 
-func Transform(msg string, producer ogiproducer.Producer) (err error) {
-	return messageLog.Transform(msg, producer)
+func Transform(msg string) (err error) {
+	return messageLog.Transform(msg)
 }

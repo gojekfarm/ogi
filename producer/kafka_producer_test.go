@@ -66,17 +66,7 @@ func TestKafkaNewProducerFailAtValidateConfig(t *testing.T) {
 	unsetTestConfig()
 	k := &Kafka{}
 
-	var guard *monkey.PatchGuard
-	var guardB bool
-	guard = monkey.Patch(logger.Fatalf, func(f string, p ...interface{}) {
-		guard.Unpatch()
-		defer guard.Restore()
-		guardB = true
-		panic("mocked")
-	})
-
 	assert.Panicsf(t, func() { k.NewProducer() }, "mocked")
-	assert.True(t, guardB)
 }
 
 func TestKafkaClose(t *testing.T) {

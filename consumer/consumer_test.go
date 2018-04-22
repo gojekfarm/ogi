@@ -46,8 +46,8 @@ func TestFailIfError(t *testing.T) {
 }
 
 func TestConsume(t *testing.T) {
-	var nr, nrEnd, vc, mockGuard *monkey.PatchGuard
-	var nrB, nrEndB, vcB bool
+	var nr, nrEnd, mockGuard *monkey.PatchGuard
+	var nrB, nrEndB bool
 	mc := MockConsumer{}
 	nr = monkey.Patch(instrumentation.StartTransaction, func(string, http.ResponseWriter, *http.Request) newrelic.Transaction {
 		nr.Unpatch()
@@ -61,12 +61,6 @@ func TestConsume(t *testing.T) {
 		nrEndB = true
 		return
 	})
-	vc = monkey.Patch(validateConfig, func() {
-		vc.Unpatch()
-		defer vc.Restore()
-		vcB = true
-		return
-	})
 	mockGuard = monkey.Patch(NewMockConsumer, func() Consumer {
 		mockGuard.Unpatch()
 		defer mockGuard.Restore()
@@ -78,6 +72,5 @@ func TestConsume(t *testing.T) {
 	Consume()
 	assert.Equal(t, nrB, true)
 	assert.Equal(t, nrEndB, true)
-	assert.Equal(t, vcB, true)
 	mc.Mock.AssertExpectations(t)
 }

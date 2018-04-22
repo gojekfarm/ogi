@@ -9,10 +9,9 @@ import (
 )
 
 type ProducerPlugin struct {
-	Name            string
-	NewProducerFunc plugin.Symbol
-	CloseFunc       plugin.Symbol
-	ProduceFunc     plugin.Symbol
+	Name        string
+	CloseFunc   plugin.Symbol
+	ProduceFunc plugin.Symbol
 }
 
 var (
@@ -23,11 +22,6 @@ func NewProducerPlugin() Producer {
 	p, err := plugin.Open(ProducerPluginPath)
 	if err != nil {
 		logger.Fatalf("Error reading plugin: %s", err)
-	}
-
-	newProducerFunc, err := p.Lookup("NewProducer")
-	if err != nil {
-		logger.Fatalf("Error looking up 'NewProducer': %s", err)
 	}
 
 	closeFunc, err := p.Lookup("Close")
@@ -41,15 +35,10 @@ func NewProducerPlugin() Producer {
 	}
 
 	return &ProducerPlugin{
-		Name:            path.Base(ProducerPluginPath),
-		NewProducerFunc: newProducerFunc,
-		CloseFunc:       closeFunc,
-		ProduceFunc:     produceFunc,
+		Name:        path.Base(ProducerPluginPath),
+		CloseFunc:   closeFunc,
+		ProduceFunc: produceFunc,
 	}
-}
-
-func (plugin *ProducerPlugin) NewProducer() {
-	plugin.NewProducerFunc.(func())()
 }
 
 func (plugin *ProducerPlugin) Close() {

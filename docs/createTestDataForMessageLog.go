@@ -27,11 +27,10 @@ var (
 
 func main() {
 	logger.SetupLogger()
-	k := ogiproducer.NewProducer()
 	for msgTopic, messages := range msgMap {
 		for idx, msg := range messages {
 			msg = fmt.Sprintf("%s,%d,%s", msgTopic, idx, msg)
-			ogiproducer.Produce(k, "testdata", []byte(msg), msgTopic)
+			ogiproducer.Produce("testdata", []byte(msg), msgTopic)
 		}
 	}
 }

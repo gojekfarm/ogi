@@ -9,9 +9,8 @@ import (
 )
 
 type Producer interface {
-	NewProducer()
-	Close()
 	Produce(string, []byte, string)
+	Close()
 }
 
 type NewProducerFunc func() Producer
@@ -22,13 +21,22 @@ var (
 
 	producerMap = map[string]NewProducerFunc{
 		"confluent-kafka": NewConfluentKafka,
+		"plugin":          NewProducerPlugin,
 	}
 )
+
+func init() {
+	validateConfig()
+}
 
 func validateConfig() {
 	var missingVariables string
 	if BootstrapServers == "" {
-		missingVariables = fmt.Sprintf("%s PRODUCER_BOOTSTRAP_SERVERS", missingVariables)
+		logger.Warn("Missing Env Config: 'PRODUCER_BOOTSTRAP_SERVERS', can't use Confluent Kafka Producer")
+	}
+
+	if ProducerType == "" {
+		missingVariables = fmt.Sprintf("%s PRODUCER_TYPE", missingVariables)
 	}
 
 	if missingVariables != "" {

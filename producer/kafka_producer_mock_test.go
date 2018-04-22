@@ -9,11 +9,6 @@ type MockProducer struct {
 	mock.Mock
 }
 
-func (k *MockProducer) NewProducer() {
-	k.Mock.Called()
-	return
-}
-
 func (k *MockProducer) Close() {
 	k.Mock.Called()
 	return
@@ -26,9 +21,11 @@ func (k *MockProducer) Produce(topic string, message []byte, messageKey string) 
 
 func setTestConfig() {
 	BootstrapServers = "someserver"
+	ProducerType = "confluent-kafka"
 	logger.SetupLogger()
 }
 
 func unsetTestConfig() {
+	ProducerType = ""
 	BootstrapServers = ""
 }
