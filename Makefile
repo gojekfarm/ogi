@@ -17,6 +17,15 @@ compile: build-deps
 	cd plugin-examples/transformer/message_logs ; \
 		go build -o "../../../out/transformer-message-log.so" -buildmode=plugin . ; \
 		cd -
+	cd plugin-examples/producer/echo; \
+		go build -o "../../../out/producer-echo.so" -buildmode=plugin . ; \
+		cd -
+	cd plugin-examples/producer/filedump; \
+		go build -o "../../../out/producer-filedump.so" -buildmode=plugin . ; \
+		cd -
+	cd plugin-examples/consumer/gcp_stackdriver_logs; \
+		go build -o "../../../out/consumer-gcp-stackdriver-logs.so" -buildmode=plugin . ; \
+		cd -
 
 build: build-deps compile
 
