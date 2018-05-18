@@ -15,11 +15,13 @@ utility to enable flexible [ETL](https://en.wikipedia.org/wiki/Extract,_transfor
 
 It contains 3 primary components. A consumer, transformer and producer.
 
-Ogi initializes Consumer and let it handle the flow to transformer, or if required directly producer. That logic is internal to consumer used and not mandated. Similar internal flow freedom is granted to transformer and producer. Like, if required your producer can have multiple outputs anywhere from Kafka, S3 to something like e-mail.
+Ogi initializes Consumer and let it handle the flow to transformer, or if required directly producer. That flow is internal to consumer used and not mandated. Similar internal flow freedom is granted to transformer and producer. Like, if required your producer can have multiple outputs anywhere from Kafka, S3 to something like e-mail.
 
 All 3, `consumer`, `transformer` and `producer` are instantiated as per config and thus any combination of available types could be brought into play.
 
-Consumer, Transformer and Producer support usage of `golang plugin`, so separately managed and developed constructs could be used in combination as well. Since they are loaded as per configuration provided identifier, one can have combination of say built-in Kafka consumer with built-in kubernetes-log transformer but custom external plug-in of Google Cloud Datastore for cold storage of logs.
+Consumer, Transformer and Producer support usage of `golang plugin`, so separately managed and developed constructs could be used in combination as well.
+Since they are loaded as per configuration provided identifier, one can have combination of say built-in Kafka consumer with built-in kubernetes-log transformer but custom external plug-in of Google Cloud Datastore for cold storage of logs.
+This also gives capability to write a producer sending output to more than one output sinks in same flow to achieve replication.
 
 ---
 

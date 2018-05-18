@@ -6,7 +6,7 @@ type MockKubernetesKafkaLog struct {
 	mock.Mock
 }
 
-func (k *MockKubernetesKafkaLog) Transform(msg string) error {
+func (k *MockKubernetesKafkaLog) Transform(msg []byte) error {
 	k.Mock.Called()
 	return nil
 }

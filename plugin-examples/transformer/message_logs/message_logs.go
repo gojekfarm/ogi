@@ -39,6 +39,6 @@ func (msgLog *MessageLog) Transform(msg string) (err error) {
 	return
 }
 
-func Transform(msg string) (err error) {
-	return messageLog.Transform(msg)
+func Transform(msg []byte) (err error) {
+	return messageLog.Transform(string(msg))
 }

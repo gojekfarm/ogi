@@ -37,6 +37,6 @@ func NewTransformerPlugin() Transformer {
 	}
 }
 
-func (plugin *TransformerPlugin) Transform(msg string) error {
-	return plugin.TransformFunc.(func(string) error)(msg)
+func (plugin *TransformerPlugin) Transform(msg []byte) error {
+	return plugin.TransformFunc.(func([]byte) error)(msg)
 }

@@ -63,7 +63,7 @@ func TestTransformSuccess(t *testing.T) {
 		nrEndB = true
 		return
 	})
-	guard = monkey.Patch((*KubernetesKafkaLog).Transform, func(*KubernetesKafkaLog, string) error {
+	guard = monkey.Patch((*KubernetesKafkaLog).Transform, func(*KubernetesKafkaLog, []byte) error {
 		guard.Unpatch()
 		defer guard.Restore()
 		guardB = true
@@ -76,7 +76,7 @@ func TestTransformSuccess(t *testing.T) {
 		return
 	})
 
-	Transform("{}")
+	Transform([]byte("{}"))
 	assert.True(t, nrB)
 	assert.True(t, nrEndB)
 	assert.True(t, guardB)
@@ -98,7 +98,7 @@ func TestTransformFailure(t *testing.T) {
 		defer nrEnd.Restore()
 		return
 	})
-	guard = monkey.Patch((*KubernetesKafkaLog).Transform, func(*KubernetesKafkaLog, string) error {
+	guard = monkey.Patch((*KubernetesKafkaLog).Transform, func(*KubernetesKafkaLog, []byte) error {
 		guard.Unpatch()
 		defer guard.Restore()
 		guardB = true
@@ -111,7 +111,7 @@ func TestTransformFailure(t *testing.T) {
 		return
 	})
 
-	Transform("{}")
+	Transform([]byte("{}"))
 	assert.True(t, guardB)
 	assert.True(t, logrguardB)
 }

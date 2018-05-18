@@ -13,19 +13,30 @@ compile: build-deps
 	mkdir -p out
 
 	GOOS=linux GOARCH=amd64 go build -o out/ogi main.go
+	echo "compiled ogi main"
 
 	cd plugin-examples/transformer/message_logs ; \
 		go build -o "../../../out/transformer-message-log.so" -buildmode=plugin . ; \
-		cd -
+		cd - ; echo "compiled transformer.message_logs plugin"
+	cd plugin-examples/transformer/os_path_exists ; \
+		go build -o "../../../out/transformer-os-path-exists.so" -buildmode=plugin . ; \
+		cd - ; echo "compiled transformer.os_path_exists plugin"
+
 	cd plugin-examples/producer/echo; \
 		go build -o "../../../out/producer-echo.so" -buildmode=plugin . ; \
-		cd -
+		cd - ; echo "compiled producer.echo plugin"
 	cd plugin-examples/producer/filedump; \
 		go build -o "../../../out/producer-filedump.so" -buildmode=plugin . ; \
-		cd -
+		cd - ; echo "compiled producer.filedump plugin"
+
 	cd plugin-examples/consumer/gcp_stackdriver_logs; \
 		go build -o "../../../out/consumer-gcp-stackdriver-logs.so" -buildmode=plugin . ; \
-		cd -
+		cd - ; echo "compiled consumer.gcp_stackdriver_logs plugin"
+	cd plugin-examples/consumer/file_line_by_line; \
+		go build -o "../../../out/consumer-file-line-by-line.so" -buildmode=plugin . ; \
+		cd - ; echo "compiled consumer.file_line_by_line plugin"
+
+	echo "done."
 
 build: build-deps compile
 

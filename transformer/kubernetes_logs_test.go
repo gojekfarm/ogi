@@ -72,7 +72,7 @@ func TestKubernetesKafkaLogTransformSuccess(t *testing.T) {
 	})
 
 	kkl := KubernetesKafkaLog{}
-	err = kkl.Transform(kubernetesKafkaLogMessage)
+	err = kkl.Transform([]byte(kubernetesKafkaLogMessage))
 	assert.Nil(t, err)
 
 	actual := reg.ReplaceAllString(string(guardMessage), "")
@@ -90,7 +90,7 @@ func TestKubernetesKafkaLogTransformUnmarshallError(t *testing.T) {
 	}`
 
 	kkl := KubernetesKafkaLog{}
-	err := kkl.Transform(kubernetesKafkaLogMessageBad)
+	err := kkl.Transform([]byte(kubernetesKafkaLogMessageBad))
 	assert.NotNil(t, err)
 }
 
@@ -116,6 +116,6 @@ func TestKubernetesKafkaLogTransformNoTopicLabel(t *testing.T) {
 	}`
 
 	kkl := KubernetesKafkaLog{}
-	err := kkl.Transform(kubernetesKafkaLogMessageWithoutTopic)
+	err := kkl.Transform([]byte(kubernetesKafkaLogMessageWithoutTopic))
 	assert.NotNil(t, err)
 }

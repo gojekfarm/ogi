@@ -10,7 +10,6 @@ import (
 	"github.com/abhishekkr/gol/golenv"
 	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
 
-	instrumentation "github.com/gojekfarm/ogi/instrumentation"
 	logger "github.com/gojekfarm/ogi/logger"
 	ogitransformer "github.com/gojekfarm/ogi/transformer"
 )
@@ -89,9 +88,7 @@ func (k *Kafka) EventHandler() {
 				k.Consumer.Unassign()
 
 			case *kafka.Message:
-				txn := instrumentation.StartTransaction("event_kafka_message_transaction", nil, nil)
-				ogitransformer.Transform(string(e.Value))
-				instrumentation.EndTransaction(&txn)
+				go ogitransformer.Transform(e.Value)
 
 			case kafka.PartitionEOF:
 				logger.Infof("%% Reached %v\n", e)

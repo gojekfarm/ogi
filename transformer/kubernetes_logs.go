@@ -37,9 +37,7 @@ var (
 	KubernetesTopicLabel = golenv.OverrideIfEnv("PRODUCER_KUBERNETES_TOPIC_LABEL", "app")
 )
 
-func (kafkaLog *KubernetesKafkaLog) Transform(msg string) (err error) {
-	msgBytes := []byte(msg)
-
+func (kafkaLog *KubernetesKafkaLog) Transform(msgBytes []byte) (err error) {
 	if err = json.Unmarshal(msgBytes, &kafkaLog); err != nil {
 		err = golerror.Error(123, "failed to parse")
 		return

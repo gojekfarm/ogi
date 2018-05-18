@@ -1,32 +1,30 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"log"
 
-type Echo struct {
-}
-
-var (
-	e *Echo
+	"github.com/abhishekkr/gol/golenv"
 )
 
-func init() {
-	e = new(Echo)
-}
+var (
+	Separator = golenv.OverrideIfEnv("OGI_ECHO_SEPARATOR", "")
+)
 
-func (echo *Echo) Close() {
+func Close() {
 	fmt.Println("~ ogi is done printing data")
 }
 
-func (echo *Echo) Produce(topic string, message []byte, messageKey string) {
-	fmt.Println("topic:", topic, "; key:", messageKey)
-	fmt.Println(string(message))
-	fmt.Println("*******************************************************")
-}
-
-func Close() {
-	e.Close()
-}
-
 func Produce(topic string, message []byte, messageKey string) {
-	e.Produce(topic, message, messageKey)
+	if topic != "" {
+		fmt.Println("topic:", topic)
+	}
+	if messageKey != "" {
+		fmt.Println("key:", messageKey)
+	}
+	if len(message) != 0 {
+		fmt.Println(string(message))
+	} else {
+		log.Println("received blank message")
+	}
 }

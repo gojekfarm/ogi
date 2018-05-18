@@ -11,7 +11,7 @@ import (
 )
 
 type Transformer interface {
-	Transform(string) error
+	Transform([]byte) error
 }
 
 type NewTransformer func() Transformer
@@ -44,7 +44,7 @@ func validateConfig() {
 	}
 }
 
-func Transform(msg string) {
+func Transform(msg []byte) {
 	txn := instrumentation.StartTransaction("transform_transaction", nil, nil)
 	defer instrumentation.EndTransaction(&txn)
 
