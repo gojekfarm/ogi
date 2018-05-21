@@ -35,9 +35,7 @@ Can be scaled up easily using kubernetes/nomad/mesos/\* elastic deployments as i
 
 #### Examples
 
-* [fan out of Kubernetes log from Kafka bulk topic to Kafka label-sharded topic](#)
-
-* [pull logs from Google Stackdriver to system stdout](#)
+* [a very simple usecase to understand design and writing plugins](./example-usecase-01.md)
 
 ---
 

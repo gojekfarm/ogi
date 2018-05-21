@@ -15,7 +15,10 @@ var (
 )
 
 func transform(lyne string) {
-	ogitransformer.Transform([]byte(lyne))
+	err := ogitransformer.Transform([]byte(lyne))
+	if err != nil {
+		log.Println("failed for:", err)
+	}
 }
 
 func consumeFile() {
@@ -27,7 +30,7 @@ func consumeFile() {
 
 	fileScanner := bufio.NewScanner(fileHandle)
 	for fileScanner.Scan() {
-		ogitransformer.Transform([]byte(fileScanner.Text()))
+		transform(fileScanner.Text())
 	}
 }
 
