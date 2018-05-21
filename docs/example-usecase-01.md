@@ -21,7 +21,7 @@ Here we'll be using custom plugins for consumer, transformer and producer.
 
 We'll have a quick look at their code to identify how a minimal plugin could be written as well.
 
-> Ogi's primary concern in just invoking Consumer and then let it take the charge of flow of logic.
+> Ogi's primary concern is just invoking Consumer and then let it take the charge of flow of logic.
 >
 > Ogi doesn't require or dictate anything else. Then while using Consumer (or Transformer, Producer), if using a plugin they should also abide by simple one or two primary exported functions. Anything else in them is not of Ogi's concern or purview.
 
@@ -100,7 +100,7 @@ func Transform(msg []byte) (err error) {
 >
 > * `Produce(string, []byte, string)` to call Produce on required `topic`, `message` and `message-key` in respective order.
 >
-> * `Close()` is exported as well to allow certain flows to keep an open connection right from consumer for entire lifetime of consumption and then call a final close at the end.
+> * `Close()` is exported as well to allow certain flows to keep an open connection right from consumer for entire lifetime of consumption and then call a final close at the end. Although default behavior is `Close()` gets called post every produce. But a custom plugin set could manage it by making `Close()`'s internal flow to only proceed on a particular shared env var's value. That value could be set by consumer or transformer at desired event.
 >
 > We'll notice in given example only topic and message is passed by transformer, but an empty message-key. As there is no need of it.
 > Now it is job of every producer to mandate what fields are mandatory for it to be provided and what can be empty.
