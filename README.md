@@ -1,5 +1,8 @@
 ## Ogi
 
+[![Go Report Card](https://goreportcard.com/badge/gojekfarm/ogi)](https://goreportcard.com/report/gojekfarm/ogi)
+
+
 utility to enable flexible [ETL](https://en.wikipedia.org/wiki/Extract,_transform,_load) scenarios
 
 > ![ogi means a japanese fan](docs/ogi.png "ogi means a japanese fan")

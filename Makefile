@@ -3,6 +3,7 @@ all: build test
 
 
 setup:
+	mkdir -p $GOPATH/bin
 	if which dep &> /dev/null ; then go get -u github.com/golang/dep/cmd/dep ; fi
 
 
@@ -40,7 +41,7 @@ compile: build-deps
 
 build: build-deps compile
 
-build-test-plugins:
+build-test-plugins: build-deps
 	export THIS_DIR=$(pwd)
 	cd tests/consumer ; \
 		go build -o "../consumer.so" -buildmode=plugin . ; cd -
