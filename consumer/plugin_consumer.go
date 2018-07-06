@@ -5,8 +5,8 @@ import (
 	"plugin"
 
 	"github.com/abhishekkr/gol/golenv"
-	instrumentation "github.com/gojekfarm/ogi/instrumentation"
-	logger "github.com/gojekfarm/ogi/logger"
+	instrumentation "github.com/gojektech/ogi/instrumentation"
+	logger "github.com/gojektech/ogi/logger"
 )
 
 type ConsumerPlugin struct {

@@ -1,7 +1,7 @@
 package ogiproducer
 
 import (
-	logger "github.com/gojekfarm/ogi/logger"
+	logger "github.com/gojektech/ogi/logger"
 	"github.com/stretchr/testify/mock"
 )
 

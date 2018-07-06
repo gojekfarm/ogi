@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/abhishekkr/gol/golenv"
-	"github.com/gojekfarm/ogi/instrumentation"
-	logger "github.com/gojekfarm/ogi/logger"
+	"github.com/gojektech/ogi/instrumentation"
+	logger "github.com/gojektech/ogi/logger"
 )
 
 type Producer interface {

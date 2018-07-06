@@ -10,8 +10,8 @@ import (
 	"github.com/abhishekkr/gol/golenv"
 	kafka "github.com/confluentinc/confluent-kafka-go/kafka"
 
-	logger "github.com/gojekfarm/ogi/logger"
-	ogitransformer "github.com/gojekfarm/ogi/transformer"
+	logger "github.com/gojektech/ogi/logger"
+	ogitransformer "github.com/gojektech/ogi/transformer"
 )
 
 type Kafka struct {

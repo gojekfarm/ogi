@@ -6,8 +6,8 @@ import (
 	"github.com/bouk/monkey"
 	"github.com/stretchr/testify/mock"
 
-	logger "github.com/gojekfarm/ogi/logger"
-	ogiproducer "github.com/gojekfarm/ogi/producer"
+	logger "github.com/gojektech/ogi/logger"
+	ogiproducer "github.com/gojektech/ogi/producer"
 )
 
 type MockMessageLog struct {

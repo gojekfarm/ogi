@@ -7,7 +7,7 @@ import (
 
 	"github.com/abhishekkr/gol/golenv"
 
-	ogitransformer "github.com/gojekfarm/ogi/transformer"
+	ogitransformer "github.com/gojektech/ogi/transformer"
 )
 
 var (
@@ -15,10 +15,7 @@ var (
 )
 
 func transform(lyne string) {
-	err := ogitransformer.Transform([]byte(lyne))
-	if err != nil {
-		log.Println("failed for:", err)
-	}
+	ogitransformer.Transform([]byte(lyne))
 }
 
 func consumeFile() {

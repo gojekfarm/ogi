@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	logger "github.com/gojekfarm/ogi/logger"
-	ogiproducer "github.com/gojekfarm/ogi/producer"
+	logger "github.com/gojektech/ogi/logger"
+	ogiproducer "github.com/gojektech/ogi/producer"
 )
 
 var (

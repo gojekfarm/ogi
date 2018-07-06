@@ -1,9 +1,9 @@
 
 ## Contribution Guidelines _for Ogi_
 
-[Ogi](https://github.com/gojekfarm/ogi) `https://github.com/gojekfarm/ogi` is an OpenSource project licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
+[Ogi](https://github.com/gojektech/ogi) `https://github.com/gojektech/ogi` is an OpenSource project licensed under [Apache License 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
-Contributions in terms of code or documentation is appreciated as a PR. You can also report an issue or raise a feature request using [Github issues](https://github.com/gojekfarm/ogi/issues).
+Contributions in terms of code or documentation is appreciated as a PR. You can also report an issue or raise a feature request using [Github issues](https://github.com/gojektech/ogi/issues).
 
 Here are our contribution guidelines with some more details:
 

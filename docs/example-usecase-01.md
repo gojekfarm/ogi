@@ -45,7 +45,7 @@ import (
 
 	"github.com/abhishekkr/gol/golenv"
 
-	ogitransformer "github.com/gojekfarm/ogi/transformer"
+	ogitransformer "github.com/gojektech/ogi/transformer"
 )
 
 var FileToConsume = golenv.OverrideIfEnv("OGI_FILE_TO_CONSUME", "/tmp/ogi-consumed")
@@ -77,7 +77,7 @@ package main
 import (
 	"os"
 
-	ogiproducer "github.com/gojekfarm/ogi/producer"
+	ogiproducer "github.com/gojektech/ogi/producer"
 )
 
 func Transform(msg []byte) (err error) {

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"runtime"
 
-	ogiconsumer "github.com/gojekfarm/ogi/consumer"
-	logger "github.com/gojekfarm/ogi/logger"
+	ogiconsumer "github.com/gojektech/ogi/consumer"
+	logger "github.com/gojektech/ogi/logger"
 )
 
 func main() {

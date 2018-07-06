@@ -5,7 +5,7 @@
 * git clone `kafka-ogi` repo
 
 ```
-git clone https://github.com/gojekfarm/kafka-ogi
+git clone https://github.com/gojektech/kafka-ogi
 ```
 
 

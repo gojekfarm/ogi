@@ -8,8 +8,8 @@ import (
 	newrelic "github.com/newrelic/go-agent"
 	"github.com/stretchr/testify/assert"
 
-	instrumentation "github.com/gojekfarm/ogi/instrumentation"
-	logger "github.com/gojekfarm/ogi/logger"
+	instrumentation "github.com/gojektech/ogi/instrumentation"
+	logger "github.com/gojektech/ogi/logger"
 )
 
 func TestValdiateConfig(t *testing.T) {

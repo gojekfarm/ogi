@@ -6,7 +6,7 @@ import (
 	"path"
 
 	"github.com/abhishekkr/gol/golenv"
-	logger "github.com/gojekfarm/ogi/logger"
+	logger "github.com/gojektech/ogi/logger"
 )
 
 type Filedump struct {

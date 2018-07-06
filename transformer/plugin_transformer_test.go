@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/abhishekkr/gol/golenv"
-	logger "github.com/gojekfarm/ogi/logger"
+	logger "github.com/gojektech/ogi/logger"
 
 	"github.com/bouk/monkey"
 	"github.com/stretchr/testify/assert"

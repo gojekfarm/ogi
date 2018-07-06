@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	ogiproducer "github.com/gojekfarm/ogi/producer"
+	ogiproducer "github.com/gojektech/ogi/producer"
 )
 
 func osPathExists(ospath string) (err error) {

@@ -10,8 +10,8 @@ import (
 	newrelic "github.com/newrelic/go-agent"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/gojekfarm/ogi/instrumentation"
-	logger "github.com/gojekfarm/ogi/logger"
+	"github.com/gojektech/ogi/instrumentation"
+	logger "github.com/gojektech/ogi/logger"
 )
 
 func TestKafkaNewProducerSuccess(t *testing.T) {

@@ -8,7 +8,7 @@ import (
 	"github.com/bouk/monkey"
 	"github.com/stretchr/testify/assert"
 
-	ogiproducer "github.com/gojekfarm/ogi/producer"
+	ogiproducer "github.com/gojektech/ogi/producer"
 )
 
 func TestKubernetesKafkaLogTransformSuccess(t *testing.T) {
